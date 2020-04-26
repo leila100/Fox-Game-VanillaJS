@@ -7,12 +7,12 @@ This way, we're guaranteed to run tick every three seconds, give or take a few m
 (since the browser will wait until it's idle to call.)
 */
 import initButtons from "./buttons";
-import game from "./gameState";
+import game, { handleUserAction } from "./gameState";
 import { TICK_RATE } from "./constants";
 
 async function init() {
   console.log("starting game");
-  initButtons(game.handleUserAction);
+  initButtons(handleUserAction);
 
   let nextTimeToTick = Date.now();
   function nextAnimationFrame() {

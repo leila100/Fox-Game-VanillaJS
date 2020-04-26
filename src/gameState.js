@@ -11,7 +11,7 @@ const gameState = {
   startGame() {
     console.log("Hatching");
     this.current = "HATCHING";
-    this.wakeTime = this.wakeTime + 3;
+    this.wakeTime = this.clock + 3;
   },
   wake() {
     console.log("hatched");
@@ -56,4 +56,5 @@ const gameState = {
   },
 };
 
-module.exports = gameState;
+export const handleUserAction = gameState.handleUserAction.bind(gameState);
+export default gameState;
