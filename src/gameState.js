@@ -93,7 +93,8 @@ const gameState = {
   sleep() {
     this.current = "SLEEP";
     modFox("sleep");
-    modScene("night")
+    modScene("night");
+    clearTimes();
     this.wakeTime = this.clock + NIGHT_LENGTH;
   },
   getHungry() {
@@ -106,7 +107,7 @@ const gameState = {
     this.current = "DEAD";
     modFox("dead");
     modScene("dead");
-    this.sleepTime = -1;
+    clearTimes();
     writeModal("The fox died :( <br/> Press the middle button to start");
   },
   startCelebrating() {
@@ -132,7 +133,16 @@ const gameState = {
     this.timeToPoop = -1;
     this.dieTime = getNextDieTime(this.clock);
     modFox("pooping");
-  }
+  },
+  clearTimes() {
+    this.wakeTime = -1;
+    this.sleepTime = -1;
+    this.hungryTime = -1;
+    this.dieTime = -1;
+    this.poopTime = -1;
+    this.timeToStartCelebrating = -1;
+    this.timeToEndCelebrating = -1;
+  },
 };
 
 export const handleUserAction = gameState.handleUserAction.bind(gameState);
