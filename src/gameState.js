@@ -69,7 +69,10 @@ const gameState = {
     console.log("cleanUpPoop");
   },
   feed() {
-    console.log("feed");
+    if (this.current !== "HUNGRY") return;
+    this.current = "FEEDING";
+    this.dieTime = -1;
+    modFox("eating");
   },
   sleep() {
     this.current = "SLEEP";
