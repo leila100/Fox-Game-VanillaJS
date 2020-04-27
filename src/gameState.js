@@ -9,6 +9,8 @@ const gameState = {
   sleeptime: -1,
   hungryTime: -1,
   dieTime: -1,
+  timeToStartCelebrating: -1,
+  timeToEndCelebrating: -1,
   tick() {
     this.clock++;
     console.log(this.clock);
@@ -16,6 +18,8 @@ const gameState = {
     else if (this.clock === this.sleepTime) this.sleep();
     else if (this.clock === this.hungryTime) this.getHungry();
     else if (this.clock === this.dieTime) this.die();
+    else if (this.clock === this.timeToStartCelebrating) this.startCelebrating();
+    else if (this.clock === this.timeToEndCelebrating) this.endCelebrating();
     return this.clock;
   },
   startGame() {
@@ -73,6 +77,7 @@ const gameState = {
     this.current = "FEEDING";
     this.dieTime = -1;
     modFox("eating");
+    this.timeToStartCelebrating = this.clock + 2;
   },
   sleep() {
     this.current = "SLEEP";
@@ -87,9 +92,19 @@ const gameState = {
     modFox("hungry");
   },
   die() {
-    console.log("fox is dead")
     modFox("dead");
     modScene("dead")
+  },
+  startCelebrating() {
+    this.current = "CELEBRATING"
+    modFox("celebrate");
+    this.timeToStartCelebrating = -1;
+    this.timeToEndCelebrating = this.clock + 2;
+  },
+  endCelebrating() {
+    this.current = "IDLING";
+    modFox("idling")
+    this.timeToEndCelebrating = -1;
   }
 };
 
