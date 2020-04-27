@@ -33,11 +33,11 @@ const gameState = {
     console.log("awake");
     this.current = "IDLING";
     this.wakeTime = -1;
-    modFox("idling");
     this.scene = Math.random() > RAIN_CHANCE ? 0 : 1;
     modScene(SCENES[this.scene]);
     this.sleepTime = this.clock + DAY_LENGTH;
     this.hungryTime = getNextHungerTime(this.clock);
+    this.determineFoxState();
   },
   handleUserAction(icon) {
     // can't do actions while in these states
@@ -103,8 +103,14 @@ const gameState = {
   },
   endCelebrating() {
     this.current = "IDLING";
-    modFox("idling")
     this.timeToEndCelebrating = -1;
+    this.determineFoxState();
+  },
+  determineFoxState() {
+    if (this.current === 'IDLING') {
+      if (SCENES[this.scene] === "rain") modFox("rain");
+      else modFox("idling");
+    }
   }
 };
 
