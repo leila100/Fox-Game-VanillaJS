@@ -1,4 +1,4 @@
-import { modFox, modScene } from "./ui";
+import { modFox, modScene, togglePoopBag } from "./ui";
 import { SCENES, RAIN_CHANCE, DAY_LENGTH, NIGHT_LENGTH,
   getNextHungerTime, getNextDieTime, getNextPoopTime } from "./constants";
 
@@ -74,7 +74,12 @@ const gameState = {
     this.determineFoxState();
   },
   cleanUpPoop() {
-    console.log("cleanUpPoop");
+    if (this.current === "POOPING") {
+      this.dieTime = -1;
+      togglePoopBag(true);
+      this.startCelebrating();
+      this.hungryTime = getNextHungerTime(this.clock);
+    }
   },
   feed() {
     if (this.current !== "HUNGRY") return;
@@ -110,6 +115,7 @@ const gameState = {
     this.current = "IDLING";
     this.timeToEndCelebrating = -1;
     this.determineFoxState();
+    togglePoopBag(false);
   },
   determineFoxState() {
     if (this.current === 'IDLING') {
