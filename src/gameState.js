@@ -1,6 +1,6 @@
 import { modFox, modScene } from "./ui";
 import { SCENES, RAIN_CHANCE, DAY_LENGTH, NIGHT_LENGTH,
-  getNextHungerTime } from "./constants";
+  getNextHungerTime, getNextDieTime, } from "./constants";
 
 const gameState = {
   current: "INIT",
@@ -8,12 +8,14 @@ const gameState = {
   wakeTime: -1,
   sleeptime: -1,
   hungryTime: -1,
+  dieTime: -1,
   tick() {
     this.clock++;
     console.log(this.clock);
     if (this.clock === this.wakeTime) this.wake();
     else if (this.clock === this.sleepTime) this.sleep();
     else if (this.clock === this.hungryTime) this.getHungry();
+    else if (this.clock === this.dieTime) this.die();
     return this.clock;
   },
   startGame() {
@@ -76,10 +78,16 @@ const gameState = {
     this.wakeTime = this.clock + NIGHT_LENGTH;
   },
   getHungry() {
-  this.current = "HUNGRY";
-  this.hungryTime = -1;
-  modFox("hungry");
-}
+    this.current = "HUNGRY";
+    this.hungryTime = -1;
+    this.dieTime = getNextDieTime(this.clock)
+    modFox("hungry");
+  },
+  die() {
+    console.log("fox is dead")
+    modFox("dead");
+    modScene("dead")
+  }
 };
 
 export const handleUserAction = gameState.handleUserAction.bind(gameState);

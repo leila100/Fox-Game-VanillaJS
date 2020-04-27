@@ -7,3 +7,6 @@ export const NIGHT_LENGTH = 3;
 
 export const getNextHungerTime = clock =>
   Math.floor(Math.random() * 3) + 5 + clock;
+
+export const getNextDieTime = clock =>
+  Math.floor(Math.random() * 2) + 3 + clock;
