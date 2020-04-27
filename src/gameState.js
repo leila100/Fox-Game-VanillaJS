@@ -1,6 +1,6 @@
 import { modFox, modScene } from "./ui";
 import { SCENES, RAIN_CHANCE, DAY_LENGTH, NIGHT_LENGTH,
-  getNextHungerTime, getNextDieTime, } from "./constants";
+  getNextHungerTime, getNextDieTime, getNextPoopTime } from "./constants";
 
 const gameState = {
   current: "INIT",
@@ -11,6 +11,7 @@ const gameState = {
   dieTime: -1,
   timeToStartCelebrating: -1,
   timeToEndCelebrating: -1,
+  timeToPoop: -1,
   tick() {
     this.clock++;
     console.log(this.clock);
@@ -20,6 +21,7 @@ const gameState = {
     else if (this.clock === this.dieTime) this.die();
     else if (this.clock === this.timeToStartCelebrating) this.startCelebrating();
     else if (this.clock === this.timeToEndCelebrating) this.endCelebrating();
+    else if (this.clock === this.timeToPoop) this.poop()
     return this.clock;
   },
   startGame() {
@@ -80,6 +82,7 @@ const gameState = {
     this.dieTime = -1;
     modFox("eating");
     this.timeToStartCelebrating = this.clock + 2;
+    this.timeToPoop = getNextPoopTime(this.clock);
   },
   sleep() {
     this.current = "SLEEP";
@@ -113,6 +116,12 @@ const gameState = {
       if (SCENES[this.scene] === "rain") modFox("rain");
       else modFox("idling");
     }
+  },
+  poop() {
+    this.current = "POOPING";
+    this.timeToPoop = -1;
+    this.dieTime = getNextDieTime(this.clock);
+    modFox("pooping");
   }
 };
 
