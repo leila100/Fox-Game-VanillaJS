@@ -1,18 +1,19 @@
 import { modFox, modScene } from "./ui";
-import { SCENES, RAIN_CHANCE, DAY_LENGTH, NIGHT_LENGTH } from "./constants";
+import { SCENES, RAIN_CHANCE, DAY_LENGTH, NIGHT_LENGTH,
+  getNextHungerTime } from "./constants";
 
 const gameState = {
   current: "INIT",
   clock: 1,
   wakeTime: -1,
   sleeptime: -1,
+  hungryTime: -1,
   tick() {
     this.clock++;
     console.log(this.clock);
     if (this.clock === this.wakeTime) this.wake();
-    else if (this.clock === this.sleepTime) {
-  this.sleep();
-}
+    else if (this.clock === this.sleepTime) this.sleep();
+    else if (this.clock === this.hungryTime) this.getHungry();
     return this.clock;
   },
   startGame() {
@@ -30,6 +31,7 @@ const gameState = {
     this.scene = Math.random() > RAIN_CHANCE ? 0 : 1;
     modScene(SCENES[this.scene]);
     this.sleepTime = this.clock + DAY_LENGTH;
+    this.hungryTime = getNextHungerTime(this.clock);
   },
   handleUserAction(icon) {
     // can't do actions while in these states
@@ -72,7 +74,12 @@ const gameState = {
     modFox("sleep");
     modScene("night")
     this.wakeTime = this.clock + NIGHT_LENGTH;
-  }
+  },
+  getHungry() {
+  this.current = "HUNGRY";
+  this.hungryTime = -1;
+  modFox("hungry");
+}
 };
 
 export const handleUserAction = gameState.handleUserAction.bind(gameState);
