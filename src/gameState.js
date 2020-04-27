@@ -94,7 +94,7 @@ const gameState = {
     this.current = "SLEEP";
     modFox("sleep");
     modScene("night");
-    clearTimes();
+    this.clearTimes();
     this.wakeTime = this.clock + NIGHT_LENGTH;
   },
   getHungry() {
@@ -107,7 +107,7 @@ const gameState = {
     this.current = "DEAD";
     modFox("dead");
     modScene("dead");
-    clearTimes();
+    this.clearTimes();
     writeModal("The fox died :( <br/> Press the middle button to start");
   },
   startCelebrating() {
